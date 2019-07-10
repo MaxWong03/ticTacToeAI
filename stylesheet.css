@@ -35,9 +35,8 @@ margin-right: auto;
   display: -webkit-flex;
   display: flex;
   justify-content: space-between;
-  align-items: center
+  
 }
-
 .choice{
   font-size: 2em;
 }
