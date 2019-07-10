@@ -23,3 +23,39 @@ margin-right: auto;
   margin-top: 10px;
 
 }
+
+.selection{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  justify-content: space-around;
+  align-items: center
+}
+
+.choice{
+  font-size: 2em;
+}
+
+.text-container{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  justify-content: space-around;
+  
+}
+
+.text{
+  margin-top: 10px;
+  font-size: 3em;
+
+}
