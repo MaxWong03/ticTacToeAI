@@ -1,5 +1,17 @@
-.board{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+/* .board{
+display: block;
+margin-left: auto;
+margin-right: auto;
+} */
+
+.playground{
+  float: left;
+  width: 32%;
+  padding: 5px;
+}
+
+.background::after{
+  content: "";
+  clear:both;
+  display: table;
 }
