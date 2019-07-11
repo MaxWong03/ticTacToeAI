@@ -24,7 +24,7 @@ margin-right: auto;
 
 }
 
-.selection{
+/* .selection{
   padding: 0;
   margin-left: 150px;
   margin-right: 150px;
@@ -36,11 +36,37 @@ margin-right: auto;
   display: flex;
   justify-content: space-between;
   
-}
-.choice{
-  font-size: 2em;
+} */
+
+.selection{
+  display: grid;
+  grid-template-columns: [x]25% [choiceS] 50% [choiceE] 25% [o];
+  grid-template-rows: [row1S] 5% [row1E] 50%[row2E];
+  justify-items: center;
 }
 
+#X{
+  grid-column-start: x;
+  grid-column-end: choiceS;
+  grid-row-start: row1S;
+  grid-row-start: row1E;
+}
+
+#O{
+  grid-column-start: choiceE;
+  grid-column-end: o;
+  grid-row-start: row1S;
+  grid-row-start: row1E;
+}
+
+.choice{
+  grid-column-start: choiceS;
+  grid-column-end: choiceE;
+  grid-row-start: row1S;
+  grid-row-start: row1E;
+  font-size: 2em;
+}
+/* 
 .text-container{
   padding: 0;
   margin-left: 120px;
@@ -53,9 +79,24 @@ margin-right: auto;
   display: flex;
   justify-content: space-between;
   
-}
+} */
 
 .text{
   margin-top: 10px;
   font-size: 0em;
+}
+#second{
+  grid-column-start: choiceE;
+  grid-column-end: o;
+  grid-row-start: row1E;
+  grid-row-start: row2E;
+  align-self: flex-end;
+}
+
+#first{
+  grid-column-start: x;
+  grid-column-end: choiceS;
+  grid-row-start: row1E;
+  grid-row-start: row2E;
+  align-self: flex-end;
 }
