@@ -15,8 +15,6 @@ const domObjects = {
 
 $(function () {
 
-
-
   //hover or X
   $(domObjects.cross).hover(function () {
     $(this).toggleClass(domObjects.bigCross, true);
@@ -39,16 +37,23 @@ $(function () {
 
   //Click X
   $('#X').click(function(){
-    $(domObjects.choice).fadeToggle(500);
-    $(domObjects.circle).fadeToggle(500);
+    $(domObjects.choice).animate({
+      opacity: 0
+    },500);
+    $(domObjects.circle).animate({
+      opacity: 0
+    },500);
+
   });
 
   //Click O
   $('#O').click(function(){
-    $(domObjects.choice).fadeToggle(500);
-    $(domObjects.cross).fadeToggle(500);
-    setTimeout(()=>$(domObjects.selection).css('justify-content', 'flex-end'),500);
-    
+    $(domObjects.choice).animate({
+      opacity:0
+    }, 500)
+    $(domObjects.cross).animate({
+      opacity:0
+    }, 500)
   });
 
 })
