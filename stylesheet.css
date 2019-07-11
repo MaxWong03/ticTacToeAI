@@ -1,8 +1,3 @@
-/* .board{
-display: block;
-margin-left: auto;
-margin-right: auto;
-} */
 
 
 .background{
@@ -24,19 +19,6 @@ margin-right: auto;
 
 }
 
-/* .selection{
-  padding: 0;
-  margin-left: 150px;
-  margin-right: 150px;
-  list-style: none;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  justify-content: space-between;
-  
-} */
 
 .selection{
   display: grid;
@@ -66,20 +48,6 @@ margin-right: auto;
   grid-row-start: row1E;
   font-size: 2em;
 }
-/* 
-.text-container{
-  padding: 0;
-  margin-left: 120px;
-  margin-right: 120px;
-  list-style: none;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  justify-content: space-between;
-  
-} */
 
 .text{
   margin-top: 10px;
