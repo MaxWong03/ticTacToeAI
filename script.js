@@ -18,9 +18,27 @@ let ticTacToe = {
     ticTacToe.aI = 2;
     ticTacToe.player = 1;
     ticTacToe.activePlayer = 2;
+  },
+  setBackGroundColor: (player) =>{// 
+    switch (player){
+      case 1:
+        return {'background-color': 'rgba(134, 19, 19, 0.514)'};
+      default:
+        return {'background-color': 'rgba(11, 25, 90, 0.596)'};
+    }
+
+    
   }
 
 };
+
+ //initiaize game board
+ const initGameBoard = () =>{
+  for (let i = 0; i < 9; i++){
+    makeDroppable(`#gameBoard${i}`);
+  }
+};
+
 
 const monteCarloTS = (game, randPlayOutNum) => {
 
@@ -29,9 +47,11 @@ const monteCarloTS = (game, randPlayOutNum) => {
 const makeDroppable = (selector) =>{
   const gameBoardNum = Number(selector.substr(10));
   let player = ticTacToe.player;
+  const cssBGColor = ticTacToe.setBackGroundColor(player);
   $(selector).droppable({
     drop: ()=>{
       ticTacToe.gameBoard[gameBoardNum] = player;
+      $(selector).animate(cssBGColor,300);
     }
   });
 };
@@ -125,6 +145,7 @@ $(function () {
   //double click X to make it draggable and start playing
   $('#X').dblclick( function() {
     $(this).draggable();
+    initGameBoard();
   });
 
   
@@ -155,11 +176,9 @@ $(function () {
   //double click O to make it draggabe and start playing
   $('#O').dblclick( function(){
     $(this).draggable();
+    initGameBoard();
   });
 
-  //initiaize game board
-  for (let i = 0; i < 9; i++){
-    makeDroppable(`#gameBoard${i}`);
-  }
+ 
 
 })
