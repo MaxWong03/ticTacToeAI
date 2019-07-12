@@ -11,17 +11,17 @@ const domObjects = {
 };
 
 class ticTacToe {
-  constructor(){
-    this.gameBoard = [0,0,0,0,0,0,0,0];
+  constructor() {
+    this.gameBoard = [0, 0, 0, 0, 0, 0, 0, 0];
     this.activePlayer = 1;
     this.AI = 1;
     this.player = 2;
   }
-  setPlayer() { //call when player choose to go first / choose X
-    this.AI = 2;
-    this.player = 1;
+  setPlayer(choice) {
+    choice === 'X'? this.AI = 2 : this.AI = 1;
+    choice === 'X'? this.player = 1: this.player = 2;
   }
-  copyGame (){
+  copyGame() {
     let gameCopy = new ticTacToe();
     gameCopy.gameBoard = this.gameBoard.slice();
     gameCopy.activePlayer = this.activePlayer;
@@ -29,7 +29,7 @@ class ticTacToe {
     gameCopy.player = this.player;
     return gameCopy;
   }
-  setBackGroundColor (){
+  setBackGroundColor() {
     switch (this.player) {
       case 1:
         return { 'background-color': 'rgba(134, 19, 19, 0.514)' };
@@ -37,7 +37,7 @@ class ticTacToe {
         return { 'background-color': 'rgba(11, 25, 90, 0.596)' };
     }
   }
-  switchPlayer (){
+  switchPlayer() {
     switch (this.activePlayer) {
       case 1:
         this.activePlayer = 2;
@@ -46,10 +46,10 @@ class ticTacToe {
         this.activePlayer = 1;
     }
   }
-  doMove (index, player) {
+  doMove(index, player) {
     this.gameBoard[index] = player;
   }
-  legalMove (){
+  legalMove() {
     const legalMove = this.gameBoard.map((e, index) => {
       if (e === 0) {
         return index;
@@ -57,12 +57,12 @@ class ticTacToe {
     });
     return legalMove.filter(e => e !== undefined);
   }
-  inGame () {
+  inGame() {
     let inGame;
     this.winLoseDraw() === -1 ? inGame = true : inGame = false;
     return inGame;
   }
-  zeroCheck (numArr) {
+  zeroCheck(numArr) {
     let noZero = true;
     numArr.forEach(e => {
       if (this.gameBoard[e] === 0) {
@@ -71,7 +71,7 @@ class ticTacToe {
     });
     return noZero;
   }
-  winLoseDraw () {
+  winLoseDraw() {
     let winFlag = -1; //-1 means in game
     if (this.gameBoard[0] === this.gameBoard[3] && this.gameBoard[0] === this.gameBoard[6] && this.zeroCheck([0, 3, 6])) {
       if (this.gameBoard[0] === 1) {
@@ -131,27 +131,27 @@ class ticTacToe {
 }
 
 class monteCarloTS {
-  constructor(game,randPlayOutNum){
+  constructor(game, randPlayOutNum) {
     this.game = game;
     this.randPlayOutNum = randPlayOutNum;
     this.board = this.game.gameBoard;
     this.tate = this.game.inGame();
   }
-  makeMove () {
+  makeMove() {
     const legalMoves = this.game.legalMove();
     let moveWinCounts = {};
     legalMoves.forEach(move => {
       moveWinCounts[move] = 0;
     });
-    legalMoves.forEach(move =>{
-      for (let i = 0; i < this.randPlayOutNum; i++){
+    legalMoves.forEach(move => {
+      for (let i = 0; i < this.randPlayOutNum; i++) {
         moveWinCounts[move] += this.randomPlayOut(move);
       }
     });
     let moveChoice = legalMoves[0];
     let choiceWinCount = moveWinCounts[moveChoice];
-    for (let win in moveWinCounts){
-      if(moveWinCounts[win] >= choiceWinCount){
+    for (let win in moveWinCounts) {
+      if (moveWinCounts[win] >= choiceWinCount) {
         moveChoice = win;
         choiceWinCount = moveWinCounts[win];
       }
@@ -160,34 +160,34 @@ class monteCarloTS {
     return moveChoice;
 
   }
-  randomPlayOut (move){
+  randomPlayOut(move) {
     let gameCopy = this.game.copyGame();
     gameCopy.doMove(move, gameCopy.activePlayer);
     gameCopy.switchPlayer();
-    while (gameCopy.inGame()){
+    while (gameCopy.inGame()) {
       const legalMoves = gameCopy.legalMove();
-      let randMove = Math.floor(Math.random()*9);
-      while (!legalMoves.includes(randMove)){
-        randMove = Math.floor(Math.random()*9);
+      let randMove = Math.floor(Math.random() * 9);
+      while (!legalMoves.includes(randMove)) {
+        randMove = Math.floor(Math.random() * 9);
       }
       gameCopy.doMove(randMove, gameCopy.activePlayer);
       gameCopy.switchPlayer();
-      
+
     }
-    if (gameCopy.AI == 1){
-      if (gameCopy.winLoseDraw() == 2){
+    if (gameCopy.AI == 1) {
+      if (gameCopy.winLoseDraw() == 2) {
         return -5;
-      }else if (gameCopy.winLoseDraw() == 1){
+      } else if (gameCopy.winLoseDraw() == 1) {
         return 2;
-      }else{
+      } else {
         return 1;
       }
-    }else{
-      if (gameCopy.winLoseDraw() == 2){
+    } else {
+      if (gameCopy.winLoseDraw() == 2) {
         return 2;
-      }else if (gameCopy.winLoseDraw() ==1 ){
+      } else if (gameCopy.winLoseDraw() == 1) {
         return -5;
-      }else{
+      } else {
         return 1;
       }
     }
@@ -198,6 +198,23 @@ class monteCarloTS {
 
 //jquery helper functions
 
+//init game
+const initGame = (choice) => {
+
+  let ticTacToeGame = new ticTacToe();
+  initGameBoard(ticTacToeGame);
+  ticTacToeGame.setPlayer(choice);
+  let aiMonte = new monteCarloTS(ticTacToeGame, 5000);
+  let gameState = ticTacToeGame.inGame();
+  // while(gameState){
+  if (ticTacToeGame.player == 1) {
+    console.log('hi auntie');
+  } else {
+    const aiMove = aiMonte.makeMove();
+    showMove(aiMove, 1);
+  }
+  // }
+}
 
 
 //initiaize game board
@@ -265,18 +282,18 @@ const unSelectO = () => {
   resize(domObjects.second, '0em');
 }
 
-const showMove = (move, activePlayer) =>{
+const showMove = (move, activePlayer) => {
   let playObject;
   let selectorName;
-  activePlayer === 1? selectorName = `#X${move}` : selectorName = `#O${move}`;
-  activePlayer === 1? playObject = `<i class="fas fa-times fa-10x" id="X${move}" style="opacity: 0; grid-area: gameBoard${move}; justify-self: center;"></i>` : playObject = `<i class="far fa-circle fa-9x" id="O${move}" style="opacity: 0; grid-area: gameBoard${move}; justify-self: center;"></i>`;
+  activePlayer === 1 ? selectorName = `#X${move}` : selectorName = `#O${move}`;
+  activePlayer === 1 ? playObject = `<i class="fas fa-times fa-10x" id="X${move}" style="opacity: 0; grid-area: gameBoard${move}; justify-self: center;"></i>` : playObject = `<i class="far fa-circle fa-9x" id="O${move}" style="opacity: 0; grid-area: gameBoard${move}; justify-self: center;"></i>`;
 
   $('.gridContainer').append(playObject);
   $(selectorName).animate({
     opacity: 1
-  },2000);
+  }, 2000);
 
-} 
+}
 
 //end of jquery helper functions
 
@@ -315,14 +332,12 @@ $(function () {
     setTimeout(() => {
       makeDisappear(domObjects.helpText);
     }, 4000);
-    ticTacToeGame.setPlayer();
-
   });
 
   //double click X to make it draggable and start playing
   $('#X').dblclick(function () {
     $(this).draggable();
-    initGameBoard(ticTacToeGame);
+    initGame('X');
   });
 
 
@@ -353,13 +368,8 @@ $(function () {
   //double click O to make it draggabe and start playing
   $('#O').dblclick(function () {
     $(this).draggable();
-    initGameBoard(ticTacToeGame);
+    initGame('O');
   });
 })
 //end of jQuery related functions
 
-//game
-let ticTacToeGame = new ticTacToe();
-let aiMonte = new monteCarloTS(ticTacToeGame, 5000);
-const aiMove = aiMonte.makeMove();
-showMove(aiMove, 2);
