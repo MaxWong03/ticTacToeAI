@@ -48,10 +48,15 @@ let ticTacToe = {
     });
     return legalMove.filter(e => e !== undefined);
   },
+  inGame: () => {
+    let inGame;
+    ticTacToe.winLoseDraw() === -1? inGame = true : inGame = false;
+    return inGame;
+  },
   zeroCheck: (numArr) => {
     let noZero = true;
     numArr.forEach(e => {
-      if (ticTacToe.gameBoard[e] === 0){
+      if (ticTacToe.gameBoard[e] === 0) {
         return noZero = false;
       }
     });
@@ -70,7 +75,7 @@ let ticTacToe = {
         winFlag = 1;
       } else {
         winFlag = 2;
-        console.log(ticTacToe.zeroCheck([1,4,7]));
+        console.log(ticTacToe.zeroCheck([1, 4, 7]));
       }
     } else if (ticTacToe.gameBoard[2] === ticTacToe.gameBoard[5] && ticTacToe.gameBoard[2] === ticTacToe.gameBoard[8] && ticTacToe.zeroCheck([2, 5, 8])) {
       if (ticTacToe.gameBoard[2] === 1) {
@@ -108,9 +113,9 @@ let ticTacToe = {
       } else {
         winFlag = 2;
       }
-    } else if (ticTacToe.zeroCheck(ticTacToe.gameBoard)){
+    } else if (ticTacToe.zeroCheck(ticTacToe.gameBoard)) {
       winFlag = 0; //draw
-    } else{
+    } else {
       return winFlag = -1;
     }
     return winFlag;
@@ -119,153 +124,153 @@ let ticTacToe = {
 
 
 
-  const monteCarloTS = (game, randPlayOutNum) => {
+const monteCarloTS = (game, randPlayOutNum) => {
 
-  }
+}
 
 
 //jquery helper functions
 
 //initiaize game board
 const initGameBoard = () => {
-    for (let i = 0; i < 9; i++) {
-      makeDroppable(`#gameBoard${i}`);
-    }
-  };
-
-  const makeDroppable = (selector) => {
-    const gameBoardNum = Number(selector.substr(10));
-    let player = ticTacToe.player;
-    const cssBGColor = ticTacToe.setBackGroundColor(player);
-    $(selector).droppable({
-      drop: () => {
-        ticTacToe.gameBoard[gameBoardNum] = player;
-        $(selector).animate(cssBGColor, 300);
-      }
-    });
-  };
-
-  const moveToMid = (selector, area = 'choice') => {
-    $(selector).css({
-      'grid-area': area,
-      'padding-left': 0,
-      'padding-right': 0
-    });
-  };
-
-  const makeDisappear = (selector, time = 500) => {
-    $(selector).animate({
-      opacity: 0
-    }, time);
+  for (let i = 0; i < 9; i++) {
+    makeDroppable(`#gameBoard${i}`);
   }
+};
+
+const makeDroppable = (selector) => {
+  const gameBoardNum = Number(selector.substr(10));
+  let player = ticTacToe.player;
+  const cssBGColor = ticTacToe.setBackGroundColor(player);
+  $(selector).droppable({
+    drop: () => {
+      ticTacToe.gameBoard[gameBoardNum] = player;
+      $(selector).animate(cssBGColor, 300);
+    }
+  });
+};
+
+const moveToMid = (selector, area = 'choice') => {
+  $(selector).css({
+    'grid-area': area,
+    'padding-left': 0,
+    'padding-right': 0
+  });
+};
+
+const makeDisappear = (selector, time = 500) => {
+  $(selector).animate({
+    opacity: 0
+  }, time);
+}
 
 const showHelpText = () => {
-    $(domObjects.helpText).animate({
-      'font-size': '1.8em'
-    }, 500);
-  }
+  $(domObjects.helpText).animate({
+    'font-size': '1.8em'
+  }, 500);
+}
 
 const resize = (selector, size) => {
-    $(selector).animate({
-      'font-size': size
-    }, 500);
-  }
+  $(selector).animate({
+    'font-size': size
+  }, 500);
+}
 
 const selectX = () => {
-    resize(domObjects.cross, '10em');
-    resize(domObjects.first, '4em');
-  }
+  resize(domObjects.cross, '10em');
+  resize(domObjects.first, '4em');
+}
 
 const unSelectX = () => {
-    resize(domObjects.cross, '8em');
-    resize(domObjects.first, '0em');
-  }
+  resize(domObjects.cross, '8em');
+  resize(domObjects.first, '0em');
+}
 
 const selectO = () => {
-    resize(domObjects.circle, '9em');
-    resize(domObjects.second, '4em');
-  }
+  resize(domObjects.circle, '9em');
+  resize(domObjects.second, '4em');
+}
 
 const unSelectO = () => {
-    resize(domObjects.circle, '7em');
-    resize(domObjects.second, '0em');
-  }
+  resize(domObjects.circle, '7em');
+  resize(domObjects.second, '0em');
+}
 //end of jquery helper functions
 
 //jQuery releated functions
-$(function() {
+$(function () {
 
-    //hover on X
-    $(domObjects.cross).hover(
-      selectX, unSelectX
-    );
+  //hover on X
+  $(domObjects.cross).hover(
+    selectX, unSelectX
+  );
 
-    //hover on O
-    $(domObjects.circle).hover(
-      selectO, unSelectO
-    );
-
-
-    //Click X
-    $('#X').click(function () {
-      makeDisappear(domObjects.choice);
-      makeDisappear(domObjects.circle);
-      $(this).unbind('mouseenter', selectX);
-      $(this).unbind('mouseleave', unSelectX);
-      setTimeout(() => {
-        moveToMid(this);
-        moveToMid(domObjects.first, 'help');
-        $(domObjects.circle).remove();
-        $(domObjects.choice).remove();
-      }, 600);
-      setTimeout(() => {
-        makeDisappear(domObjects.first, 1000);
-      }, 500);
-      setTimeout(() => {
-        showHelpText()
-      }, 1500);
-      setTimeout(() => {
-        makeDisappear(domObjects.helpText);
-      }, 4000);
-      ticTacToe.setPlayer();
-
-    });
-
-    //double click X to make it draggable and start playing
-    $('#X').dblclick(function () {
-      $(this).draggable();
-      initGameBoard();
-    });
+  //hover on O
+  $(domObjects.circle).hover(
+    selectO, unSelectO
+  );
 
 
-    //Click O
-    $('#O').click(function () {
-      makeDisappear(domObjects.choice);
-      makeDisappear(domObjects.cross);
-      $(this).unbind('mouseenter', selectO);
-      $(this).unbind('mouseleave', unSelectO);
-      setTimeout(() => {
-        moveToMid(this);
-        moveToMid(domObjects.second, 'help');
-        $(domObjects.cross).remove();
-        $(domObjects.choice).remove();
-      }, 600);
-      setTimeout(() => {
-        makeDisappear(domObjects.second, 1000);
-      }, 500);
-      setTimeout(() => {
-        showHelpText()
-      }, 1500);
-      setTimeout(() => {
-        makeDisappear(domObjects.helpText);
-      }, 4000);
+  //Click X
+  $('#X').click(function () {
+    makeDisappear(domObjects.choice);
+    makeDisappear(domObjects.circle);
+    $(this).unbind('mouseenter', selectX);
+    $(this).unbind('mouseleave', unSelectX);
+    setTimeout(() => {
+      moveToMid(this);
+      moveToMid(domObjects.first, 'help');
+      $(domObjects.circle).remove();
+      $(domObjects.choice).remove();
+    }, 600);
+    setTimeout(() => {
+      makeDisappear(domObjects.first, 1000);
+    }, 500);
+    setTimeout(() => {
+      showHelpText()
+    }, 1500);
+    setTimeout(() => {
+      makeDisappear(domObjects.helpText);
+    }, 4000);
+    ticTacToe.setPlayer();
 
-    });
+  });
 
-    //double click O to make it draggabe and start playing
-    $('#O').dblclick(function () {
-      $(this).draggable();
-      initGameBoard();
-    });
-  })
+  //double click X to make it draggable and start playing
+  $('#X').dblclick(function () {
+    $(this).draggable();
+    initGameBoard();
+  });
+
+
+  //Click O
+  $('#O').click(function () {
+    makeDisappear(domObjects.choice);
+    makeDisappear(domObjects.cross);
+    $(this).unbind('mouseenter', selectO);
+    $(this).unbind('mouseleave', unSelectO);
+    setTimeout(() => {
+      moveToMid(this);
+      moveToMid(domObjects.second, 'help');
+      $(domObjects.cross).remove();
+      $(domObjects.choice).remove();
+    }, 600);
+    setTimeout(() => {
+      makeDisappear(domObjects.second, 1000);
+    }, 500);
+    setTimeout(() => {
+      showHelpText()
+    }, 1500);
+    setTimeout(() => {
+      makeDisappear(domObjects.helpText);
+    }, 4000);
+
+  });
+
+  //double click O to make it draggabe and start playing
+  $('#O').dblclick(function () {
+    $(this).draggable();
+    initGameBoard();
+  });
+})
 //end of jQuery related functions
