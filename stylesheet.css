@@ -2,7 +2,6 @@
   display: grid;
   grid-template-columns: 20% 20% 20% 20% 20% ;
   grid-template-rows:    auto ;
-  grid-row-gap: 3px;
   grid-template-areas: 'slide gameBoard0 gameBoard1 gameBoard2 climb'
                        'slide gameBoard3 gameBoard4 gameBoard5 climb'
                        'slide gameBoard6 gameBoard7 gameBoard8 climb'
@@ -28,12 +27,14 @@
   grid-area: x;
   place-self: center;
   padding-left: 100px;
+  padding-top: 3px;
 }
 
 #O{
   grid-area: o;
   place-self: center;
   padding-right:100px;
+  padding-top: 3px;
   
 }
 
@@ -66,3 +67,51 @@
   padding-left: 130px;
 }
 
+#gameBoard0{
+  grid-area: gameBoard0;
+  border-right: 5px solid ;
+  border-bottom: 5px solid;
+}
+
+#gameBoard1{
+  grid-area: gameBoard1;
+  border-right: 5px solid;
+  border-bottom: 5px solid;
+}
+
+#gameBoard2{
+  grid-area: gameBoard2;
+  border-bottom: 5px solid;
+}
+
+#gameBoard3{
+  grid-area: gameBoard3;
+  border-right: 5px solid;
+  border-bottom: 5px solid;
+  
+}
+
+#gameBoard4{
+  grid-area: gameBoard4;
+  border-right: 5px solid;
+  border-bottom: 5px solid;
+}
+
+#gameBoard5{
+  grid-area: gameBoard5;
+  border-bottom: 5px solid;
+}
+
+#gameBoard6{
+  grid-area: gameBoard6;
+  border-right: 5px solid;
+}
+
+#gameBoard7{
+  grid-area: gameBoard7;
+  border-right: 5px solid;
+}
+
+#gameBoard8{
+  grid-area: gameBoard8;
+}

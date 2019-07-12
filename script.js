@@ -3,13 +3,38 @@ const domObjects = {
   circle: '.fa-7x',
   first: '#first',
   second: '#second',
-  bigCross: 'fa-10x',
-  bigCircle: 'fa-9x',
   choice: '.choice',
   selection: '.selection',
   helpText: '#helpText'
 
+};
+
+let ticTacToe = {
+  gameBoard: [0,0,0,0,0,0,0,0,0],
+  activePlayer: 1,
+  aI: 1, //default - bot goes first, bot has X
+  player: 2, //default - player goes second, player has O
+  setPlayer: ()=>{ //call when player choose to go first / choose X
+    ticTacToe.aI = 2;
+    ticTacToe.player = 1;
+    ticTacToe.activePlayer = 2;
+  }
+
+};
+
+const monteCarloTS = (game, randPlayOutNum) => {
+
 }
+
+const makeDroppable = (selector) =>{
+  const gameBoardNum = Number(selector.substr(10));
+  let player = ticTacToe.player;
+  $(selector).droppable({
+    drop: ()=>{
+      ticTacToe.gameBoard[gameBoardNum] = player;
+    }
+  });
+};
 
 const moveToMid = (selector, area = 'choice') => {
   $(selector).css({
@@ -93,7 +118,7 @@ $(function () {
     setTimeout(()=>{
       makeDisappear(domObjects.helpText);
     },4000);
-
+    ticTacToe.setPlayer();
 
   });
 
@@ -124,10 +149,17 @@ $(function () {
     setTimeout(()=>{
       makeDisappear(domObjects.helpText);
     },4000);
+
   });
   
   //double click O to make it draggabe and start playing
   $('#O').dblclick( function(){
     $(this).draggable();
-  })
+  });
+
+  //initiaize game board
+  for (let i = 0; i < 9; i++){
+    makeDroppable(`#gameBoard${i}`);
+  }
+
 })
