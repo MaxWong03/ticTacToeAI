@@ -9,111 +9,112 @@ const domObjects = {
 
 };
 
-let ticTacToe = {
-  gameBoard: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  activePlayer: 1,
-  aI: 1, //default - bot goes first, bot has X
-  player: 2, //default - player goes second, player has O
-  setPlayer: () => { //call when player choose to go first / choose X
-    ticTacToe.aI = 2;
-    ticTacToe.player = 1;
-    ticTacToe.activePlayer = 2;
-  },
-  setBackGroundColor: (player) => {
-    switch (player) {
+class ticTacToe {
+  constructor(){
+    this.gameBoard = [0,0,0,0,0,0,0,0];
+    this.activePlayer = 1;
+    this.AI = 1;
+    this.player = 2;
+  }
+  setPlayer() { //call when player choose to go first / choose X
+    this.AI = 2;
+    this.player = 1;
+  }
+  setBackGroundColor (){
+    switch (this.player) {
       case 1:
         return { 'background-color': 'rgba(134, 19, 19, 0.514)' };
       default:
         return { 'background-color': 'rgba(11, 25, 90, 0.596)' };
     }
-  },
-  switchPlayer: () => {
-    switch (ticTacToe.activePlayer) {
+  }
+  switchPlayer (){
+    switch (this.activePlayer) {
       case 1:
-        ticTacToe.activePlayer = 2;
+        this.activePlayer = 2;
         break;
       default:
-        ticTacToe.activePlayer = 1;
+        this.activePlayer = 1;
     }
-  },
-  doMove: (index, player) => {
-    ticTacToe.gameBoard[index] = player;
-    return ticTacToe.gameBoard;
-  },
-  legalMove: () => {
-    const legalMove = ticTacToe.gameBoard.map((e, index) => {
+  }
+  doMove (index, player) {
+    this.gameBoard[index] = player;
+    return this.gameBoard;
+  }
+  legalMove (){
+    const legalMove = this.gameBoard.map((e, index) => {
       if (e === 0) {
         return index;
       }
     });
     return legalMove.filter(e => e !== undefined);
-  },
-  inGame: () => {
+  }
+  inGame () {
     let inGame;
-    ticTacToe.winLoseDraw() === -1? inGame = true : inGame = false;
+    this.winLoseDraw() === -1 ? inGame = true : inGame = false;
     return inGame;
-  },
-  zeroCheck: (numArr) => {
+  }
+  zeroCheck (numArr) {
     let noZero = true;
     numArr.forEach(e => {
-      if (ticTacToe.gameBoard[e] === 0) {
+      if (this.gameBoard[e] === 0) {
         return noZero = false;
       }
     });
     return noZero;
-  },
-  winLoseDraw: () => {
+  }
+  winLoseDraw () {
     let winFlag = -1; //-1 means in game
-    if (ticTacToe.gameBoard[0] === ticTacToe.gameBoard[3] && ticTacToe.gameBoard[0] === ticTacToe.gameBoard[6] && ticTacToe.zeroCheck([0, 3, 6])) {
-      if (ticTacToe.gameBoard[0] === 1) {
+    if (this.gameBoard[0] === this.gameBoard[3] && this.gameBoard[0] === this.gameBoard[6] && this.zeroCheck([0, 3, 6])) {
+      if (this.gameBoard[0] === 1) {
         winFlag = 1;
       } else {
         winFlag = 2;
       }
-    } else if (ticTacToe.gameBoard[1] === ticTacToe.gameBoard[4] && ticTacToe.gameBoard[1] === ticTacToe.gameBoard[7] && ticTacToe.zeroCheck([1, 4, 7])) {
-      if (ticTacToe.gameBoard[1] === 1) {
+    } else if (this.gameBoard[1] === this.gameBoard[4] && this.gameBoard[1] === this.gameBoard[7] && this.zeroCheck([1, 4, 7])) {
+      if (this.gameBoard[1] === 1) {
         winFlag = 1;
       } else {
         winFlag = 2;
-        console.log(ticTacToe.zeroCheck([1, 4, 7]));
+        console.log(this.zeroCheck([1, 4, 7]));
       }
-    } else if (ticTacToe.gameBoard[2] === ticTacToe.gameBoard[5] && ticTacToe.gameBoard[2] === ticTacToe.gameBoard[8] && ticTacToe.zeroCheck([2, 5, 8])) {
-      if (ticTacToe.gameBoard[2] === 1) {
-        winFlag = 1;
-      } else {
-        winFlag = 2;
-      }
-    } else if (ticTacToe.gameBoard[0] === ticTacToe.gameBoard[1] && ticTacToe.gameBoard[0] === ticTacToe.gameBoard[2] && ticTacToe.zeroCheck([0, 1, 2])) {
-      if (ticTacToe.gameBoard[0] === 1) {
+    } else if (this.gameBoard[2] === this.gameBoard[5] && this.gameBoard[2] === this.gameBoard[8] && this.zeroCheck([2, 5, 8])) {
+      if (this.gameBoard[2] === 1) {
         winFlag = 1;
       } else {
         winFlag = 2;
       }
-    } else if (ticTacToe.gameBoard[3] === ticTacToe.gameBoard[4] && ticTacToe.gameBoard[3] === ticTacToe.gameBoard[5] && ticTacToe.zeroCheck([3, 4, 5])) {
-      if (ticTacToe.gameBoard[3] === 1) {
+    } else if (this.gameBoard[0] === this.gameBoard[1] && this.gameBoard[0] === this.gameBoard[2] && this.zeroCheck([0, 1, 2])) {
+      if (this.gameBoard[0] === 1) {
         winFlag = 1;
       } else {
         winFlag = 2;
       }
-    } else if (ticTacToe.gameBoard[6] === ticTacToe.gameBoard[7] && ticTacToe.gameBoard[6] === ticTacToe.gameBoard[8] && ticTacToe.zeroCheck([6, 7, 8])) {
-      if (ticTacToe.gameBoard[6] === 1) {
+    } else if (this.gameBoard[3] === this.gameBoard[4] && this.gameBoard[3] === this.gameBoard[5] && this.zeroCheck([3, 4, 5])) {
+      if (this.gameBoard[3] === 1) {
         winFlag = 1;
       } else {
         winFlag = 2;
       }
-    } else if (ticTacToe.gameBoard[0] === ticTacToe.gameBoard[4] && ticTacToe.gameBoard[0] === ticTacToe.gameBoard[8] && ticTacToe.zeroCheck([0, 4, 8])) {
-      if (ticTacToe.gameBoard[0] === 1) {
+    } else if (this.gameBoard[6] === this.gameBoard[7] && this.gameBoard[6] === this.gameBoard[8] && this.zeroCheck([6, 7, 8])) {
+      if (this.gameBoard[6] === 1) {
         winFlag = 1;
       } else {
         winFlag = 2;
       }
-    } else if (ticTacToe.gameBoard[2] === ticTacToe.gameBoard[4] && ticTacToe.gameBoard[2] === ticTacToe.gameBoard[6] && ticTacToe.zeroCheck([2, 4, 6])) {
-      if (ticTacToe.gameBoard[2] === 1) {
+    } else if (this.gameBoard[0] === this.gameBoard[4] && this.gameBoard[0] === this.gameBoard[8] && this.zeroCheck([0, 4, 8])) {
+      if (this.gameBoard[0] === 1) {
         winFlag = 1;
       } else {
         winFlag = 2;
       }
-    } else if (ticTacToe.zeroCheck(ticTacToe.gameBoard)) {
+    } else if (this.gameBoard[2] === this.gameBoard[4] && this.gameBoard[2] === this.gameBoard[6] && this.zeroCheck([2, 4, 6])) {
+      if (this.gameBoard[2] === 1) {
+        winFlag = 1;
+      } else {
+        winFlag = 2;
+      }
+    } else if (this.zeroCheck(this.gameBoard)) {
       winFlag = 0; //draw
     } else {
       return winFlag = -1;
@@ -124,27 +125,44 @@ let ticTacToe = {
 
 
 
-const monteCarloTS = (game, randPlayOutNum) => {
+// const monteCarloTS = {
+//   board: this.gameBoard,
+//   state: ticTacToe.inGame(),
+//   randPlayOutNum: 5000,
+//   makeMove: () => {
+//     const legalMoves = ticTacToe.legalMove();
+//     const moveWinCounts = {};
+//     legalMoves.forEach(move => {
+//       moveWinCounts[move] = 0;
+//       });
+    
+    
+//   },
+//   randPlayOut: (move) => {
 
-}
+
+//   }
+// };
 
 
 //jquery helper functions
 
+let ticTacToeGame = new ticTacToe();
+
 //initiaize game board
-const initGameBoard = () => {
+const initGameBoard = (game) => {
   for (let i = 0; i < 9; i++) {
-    makeDroppable(`#gameBoard${i}`);
+    makeDroppable(`#gameBoard${i}`, game);
   }
 };
 
-const makeDroppable = (selector) => {
+const makeDroppable = (selector, game) => {
   const gameBoardNum = Number(selector.substr(10));
-  let player = ticTacToe.player;
-  const cssBGColor = ticTacToe.setBackGroundColor(player);
+  let player = game.player;
+  const cssBGColor = game.setBackGroundColor(player);
   $(selector).droppable({
     drop: () => {
-      ticTacToe.gameBoard[gameBoardNum] = player;
+      game.gameBoard[gameBoardNum] = player;
       $(selector).animate(cssBGColor, 300);
     }
   });
@@ -232,14 +250,14 @@ $(function () {
     setTimeout(() => {
       makeDisappear(domObjects.helpText);
     }, 4000);
-    ticTacToe.setPlayer();
+    ticTacToeGame.setPlayer();
 
   });
 
   //double click X to make it draggable and start playing
   $('#X').dblclick(function () {
     $(this).draggable();
-    initGameBoard();
+    initGameBoard(ticTacToeGame);
   });
 
 
@@ -270,7 +288,7 @@ $(function () {
   //double click O to make it draggabe and start playing
   $('#O').dblclick(function () {
     $(this).draggable();
-    initGameBoard();
+    initGameBoard(ticTacToeGame);
   });
 })
 //end of jQuery related functions
