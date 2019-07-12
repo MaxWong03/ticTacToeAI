@@ -10,31 +10,50 @@ const domObjects = {
 };
 
 let ticTacToe = {
-  gameBoard: [0,0,0,0,0,0,0,0,0],
+  gameBoard: [0, 0, 0, 0, 0, 0, 0, 0, 0],
   activePlayer: 1,
   aI: 1, //default - bot goes first, bot has X
   player: 2, //default - player goes second, player has O
-  setPlayer: ()=>{ //call when player choose to go first / choose X
+  setPlayer: () => { //call when player choose to go first / choose X
     ticTacToe.aI = 2;
     ticTacToe.player = 1;
     ticTacToe.activePlayer = 2;
   },
-  setBackGroundColor: (player) =>{// 
-    switch (player){
+  setBackGroundColor: (player) => {
+    switch (player) {
       case 1:
-        return {'background-color': 'rgba(134, 19, 19, 0.514)'};
+        return { 'background-color': 'rgba(134, 19, 19, 0.514)' };
       default:
-        return {'background-color': 'rgba(11, 25, 90, 0.596)'};
+        return { 'background-color': 'rgba(11, 25, 90, 0.596)' };
     }
-
-    
+  },
+  switchPlayer: () => {
+    switch(ticTacToe.activePlayer){
+      case 1:
+        ticTacToe.activePlayer = 2;
+        break;
+      default:
+        ticTacToe.activePlayer = 1;
+    }
+  },
+  doMove: (index, player) => {
+    ticTacToe.gameBoard[index] = player;
+    return ticTacToe.gameBoard;
+  },
+  legalMove: () => {
+    const legalMove = ticTacToe.gameBoard.map((e,index) => {
+      if (e === 0){
+        return index;
+      }
+    });
+    return legalMove.filter(e => e!== undefined);
   }
 
 };
 
- //initiaize game board
- const initGameBoard = () =>{
-  for (let i = 0; i < 9; i++){
+//initiaize game board
+const initGameBoard = () => {
+  for (let i = 0; i < 9; i++) {
     makeDroppable(`#gameBoard${i}`);
   }
 };
@@ -44,14 +63,14 @@ const monteCarloTS = (game, randPlayOutNum) => {
 
 }
 
-const makeDroppable = (selector) =>{
+const makeDroppable = (selector) => {
   const gameBoardNum = Number(selector.substr(10));
   let player = ticTacToe.player;
   const cssBGColor = ticTacToe.setBackGroundColor(player);
   $(selector).droppable({
-    drop: ()=>{
+    drop: () => {
       ticTacToe.gameBoard[gameBoardNum] = player;
-      $(selector).animate(cssBGColor,300);
+      $(selector).animate(cssBGColor, 300);
     }
   });
 };
@@ -64,7 +83,7 @@ const moveToMid = (selector, area = 'choice') => {
   });
 };
 
-const makeDisappear = (selector, time=500) => {
+const makeDisappear = (selector, time = 500) => {
   $(selector).animate({
     opacity: 0
   }, time);
@@ -73,13 +92,13 @@ const makeDisappear = (selector, time=500) => {
 const showHelpText = () => {
   $(domObjects.helpText).animate({
     'font-size': '1.8em'
-  },500);
+  }, 500);
 }
 
 const resize = (selector, size) => {
   $(selector).animate({
     'font-size': size
-  },500);
+  }, 500);
 }
 
 
@@ -105,7 +124,7 @@ const unSelectO = () => {
 }
 
 $(function () {
-  
+
   //hover on X
   $(domObjects.cross).hover(
     selectX, unSelectX
@@ -132,23 +151,23 @@ $(function () {
     setTimeout(() => {
       makeDisappear(domObjects.first, 1000);
     }, 500);
-    setTimeout(()=>{
+    setTimeout(() => {
       showHelpText()
-    },1500);
-    setTimeout(()=>{
+    }, 1500);
+    setTimeout(() => {
       makeDisappear(domObjects.helpText);
-    },4000);
+    }, 4000);
     ticTacToe.setPlayer();
 
   });
 
   //double click X to make it draggable and start playing
-  $('#X').dblclick( function() {
+  $('#X').dblclick(function () {
     $(this).draggable();
     initGameBoard();
   });
 
-  
+
   //Click O
   $('#O').click(function () {
     makeDisappear(domObjects.choice);
@@ -164,21 +183,21 @@ $(function () {
     setTimeout(() => {
       makeDisappear(domObjects.second, 1000);
     }, 500);
-    setTimeout(()=>{
+    setTimeout(() => {
       showHelpText()
-    },1500);
-    setTimeout(()=>{
+    }, 1500);
+    setTimeout(() => {
       makeDisappear(domObjects.helpText);
-    },4000);
+    }, 4000);
 
   });
-  
+
   //double click O to make it draggabe and start playing
-  $('#O').dblclick( function(){
+  $('#O').dblclick(function () {
     $(this).draggable();
     initGameBoard();
   });
 
- 
+
 
 })
