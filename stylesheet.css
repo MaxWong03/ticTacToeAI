@@ -1,52 +1,46 @@
-
-
-.background{
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  justify-content: space-around;
-}
-.playground{
-  padding: 5px;
-  width: 500px;
-  height: 500px;
-  margin-top: 10px;
-
-}
-
-
-.selection{
+.gridContainer{
   display: grid;
-  grid-template-columns: [x]25% [choiceS] 50% [choiceE] 25% [o];
-  grid-template-rows: [row1S] 70% [row1E] 30%[row2E];
-  justify-items: center;
+  grid-template-columns: 20% 20% 20% 20% 20% ;
+  grid-template-rows:    auto ;
+  grid-row-gap: 3px;
+  grid-template-areas: 'slide gameBoard0 gameBoard1 gameBoard2 climb'
+                       'slide gameBoard3 gameBoard4 gameBoard5 climb'
+                       'slide gameBoard6 gameBoard7 gameBoard8 climb'
+                       '. . . . .'
+                       'x choice choice choice o'
+                       'first help help help second';
+  justify-items: stretch;
+
+}
+
+
+.slide{
+  grid-area: slide;
+
+}
+
+.climb{
+  grid-area: climb;
+  place-self: stretch;
 }
 
 #X{
-  grid-column-start: x;
-  grid-column-end: choiceS;
-  grid-row-start: row1S;
-  grid-row-end: row1E;
+  grid-area: x;
+  place-self: center;
+  padding-left: 100px;
 }
 
 #O{
-  grid-column-start: choiceE;
-  grid-column-end: o;
-  grid-row-start: row1S;
-  grid-row-end: row1E;
+  grid-area: o;
+  place-self: center;
+  padding-right:100px;
+  
 }
 
 .choice{
-  grid-column-start: choiceS;
-  grid-column-end: choiceE;
-  grid-row-start: row1S;
-  grid-row-end: row1E;
+  grid-area: choice;
   font-size: 2em;
+  place-self: center;
 }
 
 .text{
@@ -54,26 +48,21 @@
   font-size: 0em;
 }
 #second{
-  grid-column-start: choiceE;
-  grid-column-end: o;
-  grid-row-start: row1E;
-  grid-row-end: row2E;
-  align-self: flex-end;
+  grid-area: second;
+  place-self: center;
+  padding-right: 100px;
 }
 
 #first{
-  grid-column-start: x;
-  grid-column-end: choiceS;
-  grid-row-start: row1E;
-  grid-row-end: row2E;
-  align-self: flex-end;
+  grid-area: first;
+  place-self: center;
+  padding-left: 100px;
+
 }
 
 #helpText{
-  grid-column-start: choiceS;
-  grid-column-end: choiceE;
-  grid-row-start: row1E;
-  grid-row-end: row2E;
+  grid-area: help;
   place-self: stretch;
-  text-align: center
+  padding-left: 130px;
 }
+

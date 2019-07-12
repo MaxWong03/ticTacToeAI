@@ -1,6 +1,6 @@
 const domObjects = {
-  cross: '.fas.fa-times.fa-8x',
-  circle: '.far.fa-circle.fa-7x',
+  cross: '.fa-8x',
+  circle: '.fa-7x',
   first: '#first',
   second: '#second',
   bigCross: 'fa-10x',
@@ -11,9 +11,12 @@ const domObjects = {
 
 }
 
-const moveToMid = (selector) => {
-  $(selector).css('grid-column-start', 'choiceS');
-  $(selector).css('grid-column-end', 'choiceE');
+const moveToMid = (selector, area = 'choice') => {
+  $(selector).css({
+    'grid-area': area,
+    'padding-left': 0,
+    'padding-right': 0
+  });
 };
 
 const makeDisappear = (selector, time=500) => {
@@ -28,38 +31,46 @@ const showHelpText = () => {
   },500);
 }
 
+const resize = (selector, size) => {
+  $(selector).animate({
+    'font-size': size
+  },500);
+}
+
+
+
 const selectX = () => {
-  $(domObjects.cross).toggleClass(domObjects.bigCross, true);
-  $(domObjects.first).css('font-size', '4em');
+  resize(domObjects.cross, '10em');
+  resize(domObjects.first, '4em');
 }
 
 const unSelectX = () => {
-  $(domObjects.cross).toggleClass(domObjects.bigCross, false);
-  $(domObjects.first).css('font-size', '0em');
+  resize(domObjects.cross, '8em');
+  resize(domObjects.first, '0em');
 }
 
 const selectO = () => {
-  $(domObjects.circle).toggleClass(domObjects.bigCircle, true);
-  $(domObjects.second).css('font-size', '4em');
+  resize(domObjects.circle, '9em');
+  resize(domObjects.second, '4em');
 }
 
 const unSelectO = () => {
-  $(domObjects.circle).toggleClass(domObjects.bigCircle, false);
-  $(domObjects.second).css('font-size', '0em');
+  resize(domObjects.circle, '7em');
+  resize(domObjects.second, '0em');
 }
 
 $(function () {
-
+  
+  //hover on X
   $(domObjects.cross).hover(
     selectX, unSelectX
   );
 
-  //hover or O
+  //hover on O
   $(domObjects.circle).hover(
     selectO, unSelectO
   );
 
-  //hover or X
 
   //Click X
   $('#X').click(function () {
@@ -69,7 +80,7 @@ $(function () {
     $(this).unbind('mouseleave', unSelectX);
     setTimeout(() => {
       moveToMid(this);
-      moveToMid(domObjects.first);
+      moveToMid(domObjects.first, 'help');
       $(domObjects.circle).remove();
       $(domObjects.choice).remove();
     }, 600);
@@ -100,7 +111,7 @@ $(function () {
     $(this).unbind('mouseleave', unSelectO);
     setTimeout(() => {
       moveToMid(this);
-      moveToMid(domObjects.second);
+      moveToMid(domObjects.second, 'help');
       $(domObjects.cross).remove();
       $(domObjects.choice).remove();
     }, 600);
