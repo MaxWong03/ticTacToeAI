@@ -5,8 +5,9 @@ const domObjects = {
   second: '#second',
   choice: '.choice',
   selection: '.selection',
-  helpText: '#helpText'
-
+  helpText: '#helpText',
+  bigCross: 'fas fa-times fa-10x',
+  bigCircle: 'far fa-circle fa-9x'
 };
 
 class ticTacToe {
@@ -19,6 +20,14 @@ class ticTacToe {
   setPlayer() { //call when player choose to go first / choose X
     this.AI = 2;
     this.player = 1;
+  }
+  copyGame (){
+    let gameCopy = new ticTacToe();
+    gameCopy.gameBoard = this.gameBoard.slice();
+    gameCopy.activePlayer = this.activePlayer;
+    gameCopy.AI = this.AI;
+    gameCopy.player = this.player;
+    return gameCopy;
   }
   setBackGroundColor (){
     switch (this.player) {
@@ -39,7 +48,6 @@ class ticTacToe {
   }
   doMove (index, player) {
     this.gameBoard[index] = player;
-    return this.gameBoard;
   }
   legalMove (){
     const legalMove = this.gameBoard.map((e, index) => {
@@ -76,7 +84,6 @@ class ticTacToe {
         winFlag = 1;
       } else {
         winFlag = 2;
-        console.log(this.zeroCheck([1, 4, 7]));
       }
     } else if (this.gameBoard[2] === this.gameBoard[5] && this.gameBoard[2] === this.gameBoard[8] && this.zeroCheck([2, 5, 8])) {
       if (this.gameBoard[2] === 1) {
@@ -123,31 +130,75 @@ class ticTacToe {
   }
 }
 
+class monteCarloTS {
+  constructor(game,randPlayOutNum){
+    this.game = game;
+    this.randPlayOutNum = randPlayOutNum;
+    this.board = this.game.gameBoard;
+    this.tate = this.game.inGame();
+  }
+  makeMove () {
+    const legalMoves = this.game.legalMove();
+    let moveWinCounts = {};
+    legalMoves.forEach(move => {
+      moveWinCounts[move] = 0;
+    });
+    legalMoves.forEach(move =>{
+      for (let i = 0; i < this.randPlayOutNum; i++){
+        moveWinCounts[move] += this.randomPlayOut(move);
+      }
+    });
+    let moveChoice = legalMoves[0];
+    let choiceWinCount = moveWinCounts[moveChoice];
+    for (let win in moveWinCounts){
+      if(moveWinCounts[win] >= choiceWinCount){
+        moveChoice = win;
+        choiceWinCount = moveWinCounts[win];
+      }
+    }
+    this.game.doMove(moveChoice, this.game.activePlayer);
+    return moveChoice;
 
+  }
+  randomPlayOut (move){
+    let gameCopy = this.game.copyGame();
+    gameCopy.doMove(move, gameCopy.activePlayer);
+    gameCopy.switchPlayer();
+    while (gameCopy.inGame()){
+      const legalMoves = gameCopy.legalMove();
+      let randMove = Math.floor(Math.random()*9);
+      while (!legalMoves.includes(randMove)){
+        randMove = Math.floor(Math.random()*9);
+      }
+      gameCopy.doMove(randMove, gameCopy.activePlayer);
+      gameCopy.switchPlayer();
+      
+    }
+    if (gameCopy.AI == 1){
+      if (gameCopy.winLoseDraw() == 2){
+        return -5;
+      }else if (gameCopy.winLoseDraw() == 1){
+        return 2;
+      }else{
+        return 1;
+      }
+    }else{
+      if (gameCopy.winLoseDraw() == 2){
+        return 2;
+      }else if (gameCopy.winLoseDraw() ==1 ){
+        return -5;
+      }else{
+        return 1;
+      }
+    }
+  }
+}
 
-// const monteCarloTS = {
-//   board: this.gameBoard,
-//   state: ticTacToe.inGame(),
-//   randPlayOutNum: 5000,
-//   makeMove: () => {
-//     const legalMoves = ticTacToe.legalMove();
-//     const moveWinCounts = {};
-//     legalMoves.forEach(move => {
-//       moveWinCounts[move] = 0;
-//       });
-    
-    
-//   },
-//   randPlayOut: (move) => {
-
-
-//   }
-// };
 
 
 //jquery helper functions
 
-let ticTacToeGame = new ticTacToe();
+
 
 //initiaize game board
 const initGameBoard = (game) => {
@@ -213,6 +264,20 @@ const unSelectO = () => {
   resize(domObjects.circle, '7em');
   resize(domObjects.second, '0em');
 }
+
+const showMove = (move, activePlayer) =>{
+  let playObject;
+  let selectorName;
+  activePlayer === 1? selectorName = `#X${move}` : selectorName = `#O${move}`;
+  activePlayer === 1? playObject = `<i class="fas fa-times fa-10x" id="X${move}" style="opacity: 0; grid-area: gameBoard${move}; justify-self: center;"></i>` : playObject = `<i class="far fa-circle fa-9x" id="O${move}" style="opacity: 0; grid-area: gameBoard${move}; justify-self: center;"></i>`;
+
+  $('.gridContainer').append(playObject);
+  $(selectorName).animate({
+    opacity: 1
+  },2000);
+
+} 
+
 //end of jquery helper functions
 
 //jQuery releated functions
@@ -292,3 +357,9 @@ $(function () {
   });
 })
 //end of jQuery related functions
+
+//game
+let ticTacToeGame = new ticTacToe();
+let aiMonte = new monteCarloTS(ticTacToeGame, 5000);
+const aiMove = aiMonte.makeMove();
+showMove(aiMove, 2);
