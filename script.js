@@ -213,6 +213,7 @@ const initGame = (choice) => {
     const aiMove = aiMonte.makeMove();
     showMove(aiMove, 1);
   }
+
   // }
 }
 
@@ -285,13 +286,18 @@ const unSelectO = () => {
 const showMove = (move, activePlayer) => {
   let playObject;
   let selectorName;
+  let backGroundColor;
   activePlayer === 1 ? selectorName = `#X${move}` : selectorName = `#O${move}`;
   activePlayer === 1 ? playObject = `<i class="fas fa-times fa-10x" id="X${move}" style="opacity: 0; grid-area: gameBoard${move}; justify-self: center;"></i>` : playObject = `<i class="far fa-circle fa-9x" id="O${move}" style="opacity: 0; grid-area: gameBoard${move}; justify-self: center;"></i>`;
+  activePlayer === 1 ? backGroundColor = 'rgba(134, 19, 19, 0.514)' : backGroundColor = 'rgba(11, 25, 90, 0.596)';
 
   $('.gridContainer').append(playObject);
   $(selectorName).animate({
     opacity: 1
   }, 2000);
+  $(`#gameBoard${move}`).animate({
+    'background-color': backGroundColor
+  },2000)
 
 }
 
