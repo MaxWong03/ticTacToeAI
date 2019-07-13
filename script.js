@@ -198,17 +198,18 @@ class monteCarloTS {
 
 //jquery helper functions
 
+
 //init game
 const initGame = (choice) => {
 
   let ticTacToeGame = new ticTacToe();
-  initGameBoard(ticTacToeGame);
-  ticTacToeGame.setPlayer(choice);
   let aiMonte = new monteCarloTS(ticTacToeGame, 5000);
+  initGameBoard(ticTacToeGame, aiMonte);
+  ticTacToeGame.setPlayer(choice);
   let gameState = ticTacToeGame.inGame();
   // while(gameState){
   if (ticTacToeGame.player == 1) {
-    console.log('hi auntie');
+    //wait for player to make a move
   } else {
     const aiMove = aiMonte.makeMove();
     showMove(aiMove, 1);
@@ -219,13 +220,13 @@ const initGame = (choice) => {
 
 
 //initiaize game board
-const initGameBoard = (game) => {
+const initGameBoard = (game, AI) => {
   for (let i = 0; i < 9; i++) {
-    makeDroppable(`#gameBoard${i}`, game);
+    makeDroppable(`#gameBoard${i}`, game, AI);
   }
 };
 
-const makeDroppable = (selector, game) => {
+const makeDroppable = (selector, game, AI) => {
   const gameBoardNum = Number(selector.substr(10));
   let player = game.player;
   const cssBGColor = game.setBackGroundColor(player);
@@ -233,6 +234,8 @@ const makeDroppable = (selector, game) => {
     drop: () => {
       game.gameBoard[gameBoardNum] = player;
       $(selector).animate(cssBGColor, 300);
+      const aiMove = AI.makeMove();
+      showMove(aiMove,1);
     }
   });
 };
