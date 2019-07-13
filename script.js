@@ -204,15 +204,16 @@ const initGame = (choice) => {
 
   let ticTacToeGame = new ticTacToe();
   let aiMonte = new monteCarloTS(ticTacToeGame, 5000);
-  initGameBoard(ticTacToeGame, aiMonte);
   ticTacToeGame.setPlayer(choice);
+  initGameBoard(ticTacToeGame, aiMonte);
   let gameState = ticTacToeGame.inGame();
   // while(gameState){
   if (ticTacToeGame.player == 1) {
     //wait for player to make a move
   } else {
     const aiMove = aiMonte.makeMove();
-    showMove(aiMove, 1);
+    showMove(aiMove, ticTacToeGame.activePlayer);
+    ticTacToeGame.switchPlayer();
   }
 
   // }
@@ -229,13 +230,16 @@ const initGameBoard = (game, AI) => {
 const makeDroppable = (selector, game, AI) => {
   const gameBoardNum = Number(selector.substr(10));
   let player = game.player;
+  console.log(player);
   const cssBGColor = game.setBackGroundColor(player);
   $(selector).droppable({
     drop: () => {
       game.gameBoard[gameBoardNum] = player;
       $(selector).animate(cssBGColor, 300);
+      game.switchPlayer();
       const aiMove = AI.makeMove();
-      showMove(aiMove,1);
+      showMove(aiMove,game.activePlayer);
+      game.switchPlayer();
     }
   });
 };
@@ -292,7 +296,7 @@ const showMove = (move, activePlayer) => {
   let backGroundColor;
   activePlayer === 1 ? selectorName = `#X${move}` : selectorName = `#O${move}`;
   activePlayer === 1 ? playObject = `<i class="fas fa-times fa-10x" id="X${move}" style="opacity: 0; grid-area: gameBoard${move}; justify-self: center;"></i>` : playObject = `<i class="far fa-circle fa-9x" id="O${move}" style="opacity: 0; grid-area: gameBoard${move}; justify-self: center;"></i>`;
-  activePlayer === 1 ? backGroundColor = 'rgba(134, 19, 19, 0.514)' : backGroundColor = 'rgba(11, 25, 90, 0.596)';
+  selectorName === `#X${move}` ? backGroundColor = 'rgba(134, 19, 19, 0.514)' : backGroundColor = 'rgba(11, 25, 90, 0.596)';
 
   $('.gridContainer').append(playObject);
   $(selectorName).animate({
