@@ -18,8 +18,8 @@ class ticTacToe {
     this.player = 2;
   }
   setPlayer(choice) {
-    choice === 'X'? this.AI = 2 : this.AI = 1;
-    choice === 'X'? this.player = 1: this.player = 2;
+    choice === 'X' ? this.AI = 2 : this.AI = 1;
+    choice === 'X' ? this.player = 1 : this.player = 2;
   }
   copyGame() {
     let gameCopy = new ticTacToe();
@@ -219,6 +219,20 @@ const initGame = (choice) => {
   // }
 }
 
+const putBottom = (player) => {
+  if (player === 1) {
+    $('.fa-8x').animate({
+      left: '-8px',
+      top: '-10px'
+    }, 500);
+  } else {
+    $('.fa-7x').animate({
+      left: '-8px',
+      top:'-10px'
+    },500);
+  }
+}
+
 
 //initiaize game board
 const initGameBoard = (game, AI) => {
@@ -234,11 +248,13 @@ const makeDroppable = (selector, game, AI) => {
   const cssBGColor = game.setBackGroundColor(player);
   $(selector).droppable({
     drop: () => {
+      putBottom(player);
       game.gameBoard[gameBoardNum] = player;
       $(selector).animate(cssBGColor, 300);
+      showMove(gameBoardNum, player);
       game.switchPlayer();
       const aiMove = AI.makeMove();
-      showMove(aiMove,game.activePlayer);
+      showMove(aiMove, game.activePlayer);
       game.switchPlayer();
     }
   });
@@ -304,7 +320,7 @@ const showMove = (move, activePlayer) => {
   }, 2000);
   $(`#gameBoard${move}`).animate({
     'background-color': backGroundColor
-  },2000)
+  }, 2000)
 
 }
 
